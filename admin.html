@@ -32,8 +32,6 @@
         .stat-card { background: #222; border: 1px solid #333; padding: 20px; border-radius: 15px; text-align: center; position: relative; overflow: hidden; }
         .stat-card.online { border-color: #28a745; box-shadow: 0 0 10px rgba(40, 167, 69, 0.2); }
         .user-avatar { width: 50px; height: 50px; background: #333; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold-primary); }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #555; position: absolute; top: 15px; right: 15px; }
-        .status-dot.active { background: #28a745; box-shadow: 0 0 5px #28a745; }
         
         /* الهيدر */
         .header { text-align: center; margin-bottom: 30px; }
@@ -161,6 +159,9 @@
                     <i class="fas fa-map-marker-alt"></i>
                     <select id="district">
                         <option value="">اختر المنطقة / الحي</option>
+                        <option value="الحي التاسع">الحي التاسع (VIP)</option>
+                        <option value="جولف سيتي">جولف سيتي</option>
+                        <option value="جمعية عرابي">جمعية أحمد عرابي</option>
                         <option value="الحي الأول">الحي الأول</option>
                         <option value="الحي الثاني">الحي الثاني</option>
                         <option value="الحي الثالث">الحي الثالث</option>
@@ -169,14 +170,11 @@
                         <option value="الحي السادس">الحي السادس</option>
                         <option value="الحي السابع">الحي السابع</option>
                         <option value="الحي الثامن">الحي الثامن</option>
-                        <option value="الحي التاسع">الحي التاسع (VIP)</option>
-                        <option value="جمعية عرابي">🌳 جمعية أحمد عرابي</option>
-                        <option value="جولف سيتي">⛳ جولف سيتي</option>
                         <option value="العبور الجديدة">العبور الجديدة</option>
+                        <option value="بيت الوطن">بيت الوطن</option>
                         <option value="المنطقة الترفيهية">المنطقة الترفيهية</option>
                         <option value="إسكان عائلي">إسكان عائلي</option>
                         <option value="إسكان الشباب">إسكان الشباب</option>
-                        <option value="بيت الوطن">بيت الوطن</option>
                     </select>
                 </div>
             </div>
@@ -249,7 +247,6 @@
     </div>
 
     <script>
-        // --- 1. إعدادات المستخدمين ---
         const USERS = {
             'user101': { pass: '123', name: 'المسوق 101' },
             'user102': { pass: '123', name: 'المسوق 102' },
@@ -269,26 +266,19 @@
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('dashboardContent').style.display = 'block';
                 document.getElementById('welcomeMsg').innerText = `مرحباً بك: ${USERS[userIn].name}`;
-                
                 document.getElementById('marketerCode').value = userIn.toUpperCase();
-
                 updateUserStatus(userIn);
-                
-                // تحميل الوحدات لإدارتها
                 loadAllUnits();
-
                 if (userIn === 'admin') {
                     document.getElementById('superAdminPanel').style.display = 'block';
                     loadAdminStats();
                 }
-
             } else {
                 msg.innerText = "❌ اسم المستخدم أو كلمة المرور غير صحيحة";
                 msg.style.display = "block";
             }
         }
 
-        // 🔥 كود المشروع الجديد
         const firebaseConfig = {
             apiKey: "AIzaSyBbhybhto4kPZhdVUjpXoJa-l5Ql09qiYA",
             authDomain: "barah-project.firebaseapp.com",
@@ -309,21 +299,17 @@
             }, { merge: true });
         }
 
-        // --- دالة تحميل جميع الوحدات (للإدارة والحذف) ---
         function loadAllUnits() {
             db.collection("apartments").orderBy("createdAt", "desc").onSnapshot(snap => {
                 const container = document.getElementById('unitsList');
                 container.innerHTML = "";
-                
                 if(snap.empty) {
                     container.innerHTML = "<p style='text-align:center;'>لا توجد وحدات مرفوعة.</p>";
                     return;
                 }
-
                 snap.forEach(doc => {
                     const d = doc.data();
                     const img = (d.images && d.images.length > 0) ? d.images[0] : 'https://via.placeholder.com/60';
-                    
                     container.innerHTML += `
                         <div class="manage-card">
                             <div class="unit-info">
@@ -343,7 +329,6 @@
             });
         }
 
-        // --- دالة الحذف ---
         function deleteUnit(docId) {
             if(confirm("⚠️ هل أنت متأكد تماماً من حذف هذه الوحدة؟ لا يمكن التراجع عن هذا الإجراء.")) {
                 db.collection("apartments").doc(docId).delete().then(() => {
@@ -359,7 +344,6 @@
             const statsContainer = document.getElementById('statsContainer');
             statsContainer.innerHTML = "";
             const targets = ['user101', 'user102', 'user103'];
-
             for (let user of targets) {
                 const userDoc = await db.collection('users').doc(user).get();
                 let isOnline = false;
@@ -369,10 +353,8 @@
                     const diffMins = (now - lastActive) / 1000 / 60;
                     if(diffMins < 10) isOnline = true;
                 }
-
                 const unitsSnap = await db.collection('apartments').where('marketer', '==', user.toUpperCase()).get();
                 const totalUnits = unitsSnap.size;
-
                 statsContainer.innerHTML += `
                     <div class="stat-card ${isOnline ? 'online' : ''}">
                         <div class="user-avatar"><i class="fas fa-user-tie"></i></div>
@@ -390,9 +372,8 @@
             }
         }
 
-        // --- المتغيرات والمنطق ---
         let currentType = 'sale';
-        let visibility = 'public'; // ثابت على public
+        let visibility = 'public'; 
         let selectedAmenities = [];
 
         function setType(t) {
@@ -420,21 +401,16 @@
             status.style.color = "#D4AF37";
             updateUserStatus(CURRENT_USER);
 
-            // 🔥 مفتاح ImgBB الحقيقي
             const imgbbKey = "2b382d98a074d27c5304c08340d339ac";
-
             let imageUrls = [];
 
             try {
                 for(let i=0; i<files.length; i++) {
                     const formData = new FormData();
                     formData.append("image", files[i]);
-                    
                     status.innerText = `جاري رفع الصورة ${i+1} من ${files.length}...`;
-
                     const req = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`, {method:"POST", body:formData});
                     const res = await req.json();
-                    
                     if(res.success) {
                         imageUrls.push(res.data.url);
                     } else {
@@ -450,7 +426,7 @@
                     marketer: document.getElementById('marketerCode').value,
                     marketerPhone: document.getElementById('marketerPhone').value,
                     type: currentType,
-                    visibility: visibility, // دائماً public
+                    visibility: visibility,
                     unitType: document.getElementById('unitType').value,
                     title: document.getElementById('title').value,
                     price: Number(document.getElementById('price').value),

@@ -10,15 +10,37 @@
         :root { --gold: #D4AF37; --bg: #0f1215; --card: #1a1d23; }
         body { font-family: 'Tajawal'; background: var(--bg); color: #fff; margin: 0; padding: 0; }
         header { padding: 15px; background: #111; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 99; }
-        .filter-box { padding: 20px; background: var(--card); margin: 20px; border-radius: 10px; border: 1px solid #333; }
-        .inp { width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: #fff; margin-bottom: 10px; border-radius: 5px; }
-        .btn-search { width: 100%; padding: 10px; background: var(--gold); border: none; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        
+        /* تصميم فلتر البحث الجديد */
+        .filter-container { background: var(--card); padding: 20px; border-bottom: 1px solid #333; }
+        .filter-box { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 1000px; margin: 0 auto; }
+        
+        .search-input-group {
+            flex: 1; min-width: 200px; position: relative;
+            background: #222; border: 1px solid #444; border-radius: 50px;
+            display: flex; align-items: center; padding: 5px 15px; transition: 0.3s;
+        }
+        .search-input-group:focus-within { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+        .search-input-group i { color: var(--gold); margin-left: 10px; font-size: 1.1rem; }
+        
+        .inp { width: 100%; background: transparent; border: none; color: #fff; padding: 10px; font-family: 'Tajawal'; outline: none; -webkit-appearance: none; }
+        .inp option { background: #222; color: #fff; }
+
+        .btn-search {
+            padding: 12px 30px; background: linear-gradient(45deg, var(--gold), #aa8c2c);
+            border: none; border-radius: 50px; font-weight: bold; cursor: pointer; color: #000;
+            display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
+        .btn-search:hover { transform: scale(1.05); }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
-        .card { background: var(--card); border-radius: 10px; overflow: hidden; border: 1px solid #333; position: relative; }
+        .card { background: var(--card); border-radius: 10px; overflow: hidden; border: 1px solid #333; position: relative; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--gold); }
         .img { width: 100%; height: 200px; object-fit: cover; }
         .body { padding: 15px; }
         .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; }
         .wa { display: block; background: #25D366; color: #fff; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; margin-top: 10px; font-weight: bold; }
+        
         .sidebar { position: fixed; top: 0; right: -260px; width: 250px; height: 100%; background: #111; z-index: 200; transition: 0.3s; padding: 20px; border-left: 2px solid var(--gold); }
         .sidebar.active { right: 0; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: none; }
@@ -39,22 +61,58 @@
     <div class="overlay" onclick="toggle()"></div>
     <div class="sidebar" id="sidebar">
         <h3 style="color:var(--gold)">القائمة</h3>
-        <p><i class="fas fa-home"></i> الرئيسية</p>
-        <p><i class="fas fa-search"></i> بحث</p>
-        <p><i class="fas fa-phone"></i> تواصل</p>
+        <p onclick="location.href='vip_welcome.html'" style="cursor:pointer"><i class="fas fa-home"></i> الرئيسية</p>
+        <p onclick="toggle()"><i class="fas fa-search"></i> بحث</p>
+        <p onclick="location.href='https://wa.me/20110557821'" style="cursor:pointer"><i class="fas fa-phone"></i> تواصل</p>
     </div>
 
-    <div class="filter-box">
-        <h3 style="margin-top:0; color:var(--gold)">فلتر البحث</h3>
-        <select id="t" class="inp"><option value="all">النوع</option><option value="sale">تمليك</option><option value="rent">إيجار</option></select>
-        <select id="d" class="inp"><option value="all">المنطقة</option><option value="الحي التاسع">الحي التاسع</option><option value="جولف سيتي">جولف سيتي</option><option value="جمعية عرابي">جمعية عرابي</option></select>
-        <button class="btn-search" onclick="load()">بحث الآن <i class="fas fa-search"></i></button>
+    <div class="filter-container">
+        <div class="filter-box">
+            
+            <div class="search-input-group">
+                <i class="fas fa-exchange-alt"></i>
+                <select id="t" class="inp">
+                    <option value="all">نوع العرض (الكل)</option>
+                    <option value="sale">تمليك</option>
+                    <option value="rent">إيجار</option>
+                </select>
+            </div>
+
+            <div class="search-input-group">
+                <i class="fas fa-map-marker-alt"></i>
+                <select id="d" class="inp">
+                    <option value="all">كل المناطق</option>
+                    <option value="الحي التاسع">الحي التاسع (VIP)</option>
+                    <option value="جولف سيتي">جولف سيتي</option>
+                    <option value="جمعية عرابي">جمعية أحمد عرابي</option>
+                    <option value="الحي الأول">الحي الأول</option>
+                    <option value="الحي الثاني">الحي الثاني</option>
+                    <option value="الحي الثالث">الحي الثالث</option>
+                    <option value="الحي الرابع">الحي الرابع</option>
+                    <option value="الحي الخامس">الحي الخامس</option>
+                    <option value="الحي السادس">الحي السادس</option>
+                    <option value="الحي السابع">الحي السابع</option>
+                    <option value="الحي الثامن">الحي الثامن</option>
+                    <option value="العبور الجديدة">العبور الجديدة</option>
+                    <option value="بيت الوطن">بيت الوطن</option>
+                    <option value="المنطقة الترفيهية">المنطقة الترفيهية</option>
+                    <option value="إسكان عائلي">إسكان عائلي</option>
+                    <option value="إسكان الشباب">إسكان الشباب</option>
+                </select>
+            </div>
+
+            <div class="search-input-group">
+                <i class="fas fa-money-bill-wave"></i>
+                <input type="number" id="p" class="inp" placeholder="الحد الأقصى للسعر">
+            </div>
+
+            <button class="btn-search" onclick="load()">بحث <i class="fas fa-search"></i></button>
+        </div>
     </div>
 
-    <div class="grid" id="grid"><p style="text-align:center">جاري التحميل...</p></div>
+    <div class="grid" id="grid"><p style="text-align:center">جاري تحميل الوحدات...</p></div>
 
     <script>
-        // 🔥 كود المشروع الجديد
         const firebaseConfig = {
             apiKey: "AIzaSyBbhybhto4kPZhdVUjpXoJa-l5Ql09qiYA",
             authDomain: "barah-project.firebaseapp.com",
@@ -75,16 +133,27 @@
         });
 
         function load(){
-            const t=document.getElementById('t').value, d=document.getElementById('d').value, g=document.getElementById('grid');
+            const t=document.getElementById('t').value;
+            const d=document.getElementById('d').value;
+            const p=document.getElementById('p').value; // السعر
+            const g=document.getElementById('grid');
+            
             g.innerHTML=""; let c=0;
+            
             all.forEach(u=>{
-                if(t!=='all'&&u.type!==t)return; if(d!=='all'&&u.district!==d)return;
+                // فلتر النوع
+                if(t!=='all' && u.type!==t) return;
+                // فلتر المنطقة
+                if(d!=='all' && u.district!==d) return;
+                // فلتر السعر (لو المستخدم كتب سعر)
+                if(p && u.price > Number(p)) return;
+
                 c++;
                 const img=u.images?u.images[0]:'https://via.placeholder.com/300';
                 const badge=u.visibility==='private'?'<span style="position:absolute;top:10px;left:10px;background:red;padding:5px;font-size:0.8rem;border-radius:5px;">💎 فرصة</span>':'';
                 g.innerHTML+=`<div class="card">${badge}<img src="${img}" class="img"><div class="body"><div class="price">${u.price.toLocaleString()} EGP</div><h3>${u.title}</h3><p style="color:#aaa">${u.district} | ${u.rooms} غرف</p><a href="https://wa.me/${u.marketerPhone||'20110557821'}" class="wa">تواصل</a></div></div>`;
             });
-            if(c===0)g.innerHTML="<p>لا توجد نتائج.</p>";
+            if(c===0)g.innerHTML="<p style='text-align:center; grid-column:span 3;'>لا توجد نتائج مطابقة لبحثك.</p>";
         }
     </script>
 </body>
