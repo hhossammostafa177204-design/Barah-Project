@@ -34,9 +34,19 @@
     <div class="slogan">ELITE REAL ESTATE</div>
     <button class="login-btn" onclick="login()"><i class="fab fa-google"></i> دخول مباشر (مجاني)</button>
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyDBRcr-Np9SwYRR-cBqJDZ7FZmwk6VWLJU", authDomain: "barah-realestate-c7095.firebaseapp.com", projectId: "barah-realestate-c7095", storageBucket: "barah-realestate-c7095.firebasestorage.app", messagingSenderId: "491079034147", appId: "1:491079034147:web:c7d985a6387dfa75a8d896" };
+        // 🔥 كود المشروع الجديد
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbhybhto4kPZhdVUjpXoJa-l5Ql09qiYA",
+            authDomain: "barah-project.firebaseapp.com",
+            projectId: "barah-project",
+            storageBucket: "barah-project.firebasestorage.app",
+            messagingSenderId: "733946508060",
+            appId: "1:733946508060:web:ce99a5431363d22d8e40d9"
+        };
+
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        
         function login() {
             auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => window.location.href = "vip_welcome.html");
         }

@@ -54,9 +54,20 @@
     <div class="grid" id="grid"><p style="text-align:center">جاري التحميل...</p></div>
 
     <script>
-        const cfg={apiKey:"AIzaSyDBRcr-Np9SwYRR-cBqJDZ7FZmwk6VWLJU",authDomain:"barah-realestate-c7095.firebaseapp.com",projectId:"barah-realestate-c7095"};
-        firebase.initializeApp(cfg); const db=firebase.firestore();
+        // 🔥 كود المشروع الجديد
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbhybhto4kPZhdVUjpXoJa-l5Ql09qiYA",
+            authDomain: "barah-project.firebaseapp.com",
+            projectId: "barah-project",
+            storageBucket: "barah-project.firebasestorage.app",
+            messagingSenderId: "733946508060",
+            appId: "1:733946508060:web:ce99a5431363d22d8e40d9"
+        };
+
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
         let all=[];
+        
         function toggle(){ document.getElementById('sidebar').classList.toggle('active'); document.querySelector('.overlay').classList.toggle('active'); }
         
         db.collection("apartments").orderBy("createdAt","desc").onSnapshot(s=>{

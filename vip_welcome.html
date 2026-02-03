@@ -76,9 +76,24 @@
     </div>
 
     <script>
-        const cfg={apiKey:"AIzaSyDBRcr-Np9SwYRR-cBqJDZ7FZmwk6VWLJU",authDomain:"barah-realestate-c7095.firebaseapp.com",projectId:"barah-realestate-c7095"};
-        firebase.initializeApp(cfg);
-        firebase.auth().onAuthStateChanged(u=>{if(u)document.getElementById('userTitle').innerText=`أهلاً، ${u.displayName.split(' ')[0]}`; else location.href='index.html'});
+        // 🔥 كود المشروع الجديد
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbhybhto4kPZhdVUjpXoJa-l5Ql09qiYA",
+            authDomain: "barah-project.firebaseapp.com",
+            projectId: "barah-project",
+            storageBucket: "barah-project.firebasestorage.app",
+            messagingSenderId: "733946508060",
+            appId: "1:733946508060:web:ce99a5431363d22d8e40d9"
+        };
+
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        firebase.auth().onAuthStateChanged(u=>{
+            if(u) document.getElementById('userTitle').innerText=`أهلاً، ${u.displayName.split(' ')[0]}`; 
+            else location.href='index.html'
+        });
+        
         function sw(e,t){
             document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
